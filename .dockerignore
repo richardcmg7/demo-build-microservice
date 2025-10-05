@@ -1,0 +1,13 @@
+# .dockerignore
+target/
+!target/*.jar
+build/
+!build/libs/*.jar
+.git/
+.github/
+*.md
+.gitignore
+.mvn/
+mvnw
+mvnw.cmd
+*.log

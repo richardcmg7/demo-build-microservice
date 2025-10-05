@@ -1,0 +1,38 @@
+# Java/Maven
+/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# IDEs
+/.idea/
+*.iml
+*.ipr
+*.iws
+/.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Docker
+*.pid
+*.env
+/.docker/
+
+# Others
+node_modules/
+.env
+
+# Maven
+.mvn/
+
+# Build output
+/build/
+
+# Test output
+/surefire-reports/
