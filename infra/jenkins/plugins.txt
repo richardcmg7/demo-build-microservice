@@ -1,0 +1,22 @@
+# Plugins esenciales para Jenkins
+ant:latest
+build-timeout:latest
+credentials-binding:latest
+timestamper:latest
+ws-cleanup:latest
+github-branch-source:latest
+pipeline-github-lib:latest
+pipeline-stage-view:latest
+git:latest
+github:latest
+maven-plugin:latest
+docker-plugin:latest
+docker-workflow:latest
+pipeline-maven:latest
+blueocean:latest
+workflow-aggregator:latest
+# Plugins adicionales para Docker Hub integration
+docker-commons:latest
+docker-build-step:latest
+ansicolor:latest
+pipeline-utility-steps:latest

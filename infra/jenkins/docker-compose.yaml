@@ -1,0 +1,60 @@
+services:
+  jenkins-master:
+      container_name: jenkins-master
+      build:
+        context: .
+        dockerfile: Dockerfile.master
+      privileged: true
+      ports:
+        - "5080:8080"
+        - "50000:50000"
+      volumes:
+        - jenkins_home:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+        - shared_data:/shared
+      environment:
+        - JAVA_OPTS=-Djenkins.install.runSetupWizard=false -Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true -Xmx1024m -Xms512m -XX:+UseG1GC -XX:+UseStringDeduplication
+        - TZ=America/Bogota
+        - JENKINS_OPTS=--httpPort=8080
+      networks:
+        - devops
+      mem_limit: 1536m
+      cpus: 0.8
+      restart: unless-stopped
+
+  jenkins-slave:
+      build: 
+        context: .
+        dockerfile: Dockerfile
+      container_name: jenkins-slave
+      init: true
+      depends_on:
+        - jenkins-master
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - slave_workspace:/home/jenkins/agent
+        - maven_cache:/home/jenkins/.m2
+        - shared_data:/shared
+      environment:
+        - JENKINS_URL=http://jenkins-master:8080
+        - JENKINS_AGENT_NAME=jenkins-slave
+        - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
+        - TZ=America/Bogota
+        - JAVA_OPTS=-Xmx512m -Xms256m -XX:+UseG1GC
+      networks:
+        - devops
+      mem_limit: 768m
+      cpus: 0.4
+      restart: unless-stopped
+      # El slave se conectará automáticamente usando el script
+      command: /usr/local/bin/slave-connect.sh
+
+volumes:
+  jenkins_home:
+  slave_workspace:
+  maven_cache:
+  shared_data:
+
+networks:
+  devops:
+   external: true

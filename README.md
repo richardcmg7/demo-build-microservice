@@ -1,64 +1,54 @@
-# Reto 1: Integración continua con GitHub Actions y Docker Hub
+# Demo Microservice - Reto 2 CI/CD
 
-## Descripción
-Este repositorio contiene un microservicio Java (Spring Boot) que se construye y publica automáticamente como imagen Docker en Docker Hub usando GitHub Actions.
+Proyecto de demostración para integración continua con Jenkins y Docker Hub.
+
+## 🚀 Estructura del Proyecto
+
+```
+├── src/                    # Código fuente Java
+├── pom.xml                # Configuración Maven
+├── Dockerfile             # Imagen Docker
+├── Jenkinsfile            # Pipeline CI/CD
+└── infra/jenkins/         # Configuración Jenkins (opcional)
+```
+
+## 📋 Reto 2: Integración Continua
 
 ### Objetivo
-- Construir el artefacto (JAR) del microservicio Java.
-- Construir la imagen Docker a partir del JAR.
-- Publicar la imagen en Docker Hub con etiquetas trazables.
+Automatizar la compilación del microservicio con Maven, construir y etiquetar la imagen Docker, y publicarla en Docker Hub desde Jenkins.
 
-## Prerrequisitos
-- Repositorio en GitHub con el microservicio (Maven).
-- Dockerfile válido en la raíz del proyecto.
-- Cuenta y repositorio en Docker Hub (ejemplo: `docker.io/richardc7/reto-maven`).
-- Configurar en GitHub → Settings → Secrets:
-	- `DOCKERHUB_USERNAME`
-	- `DOCKERHUB_TOKEN`
+### Pipeline
+El `Jenkinsfile` implementa:
+1. **Checkout** - Descarga código desde Git
+2. **Build JAR** - Compila con Maven
+3. **Build & Push Image** - Construye y publica imagen Docker
 
-## Estructura mínima del proyecto
+### Configuración Jenkins
+1. Crear job tipo **Pipeline**
+2. Configurar **Pipeline script from SCM**:
+   - Repository URL: `https://github.com/richardcmg7/demo-build-microservicereto-2.git`
+   - Branch: `*/Jenkins`
+   - Script Path: `Jenkinsfile`
+3. Configurar credenciales Docker Hub con ID: `dockerhub-creds`
 
-```
-.
-├─ src/...
-├─ pom.xml
-├─ Dockerfile
-└─ .github/workflows/ci-dockerhub.yml
-```
+### Resultado
+- Imagen Docker: `richardc7/demo-micro:BUILD_NUMBER`
+- Disponible en: https://hub.docker.com/r/richardc7/demo-micro
 
-## Comandos útiles
-
-### Construir y probar localmente
+## 🛠️ Desarrollo Local
 
 ```bash
+# Compilar
 mvn clean package
-mvn test
+
+# Construir imagen
+docker build -t demo-micro:local .
+
+# Ejecutar
+docker run -p 8080:8080 demo-micro:local
 ```
 
-### Construir imagen Docker local
-
-```bash
-docker build -t reto-maven:local .
-```
-
-### Ejecutar el microservicio localmente
-
-```bash
-java -jar target/demo-micro-1.0.0.jar
-```
-
-### Ejecutar el contenedor Docker
-
-```bash
-docker run -p 8080:8080 reto-maven:local
-```
-
-## Pipeline CI/CD (GitHub Actions)
-Al hacer push a `main` o crear un tag, se ejecuta el workflow `.github/workflows/ci-dockerhub.yml`:
-1. Compila el JAR con Maven.
-2. Construye la imagen Docker.
-3. Publica la imagen en Docker Hub usando los secretos configurados.
-
-
----
-Para dudas o mejoras, consulta el código fuente y los archivos de configuración incluidos.
+## 📦 Imagen Docker
+- **Base**: eclipse-temurin:21-jre-alpine
+- **Puerto**: 8080
+- **Multi-stage build** para optimización
