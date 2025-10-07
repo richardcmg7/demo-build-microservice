@@ -27,6 +27,7 @@ services:
         context: .
         dockerfile: Dockerfile
       container_name: jenkins-slave
+      privileged: true
       init: true
       depends_on:
         - jenkins-master

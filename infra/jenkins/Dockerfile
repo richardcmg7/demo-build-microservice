@@ -26,7 +26,12 @@ ENV PATH=$PATH:$MAVEN_HOME/bin
 RUN mkdir -p /home/jenkins/agent
 RUN chown -R jenkins:jenkins /home/jenkins/agent
 
-# Agregar usuario jenkins al grupo docker
+# Crear directorio .m2 con permisos correctos
+RUN mkdir -p /home/jenkins/.m2
+RUN chown -R jenkins:jenkins /home/jenkins/.m2
+
+# Crear grupo docker con el mismo GID del host y agregar jenkins
+RUN groupadd -g 970 docker || groupmod -g 970 docker
 RUN usermod -aG docker jenkins
 
 # Copiar y dar permisos al script de conexión

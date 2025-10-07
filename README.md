@@ -26,8 +26,8 @@ El `Jenkinsfile` implementa:
 ### Configuración Jenkins
 1. Crear job tipo **Pipeline**
 2. Configurar **Pipeline script from SCM**:
-   - Repository URL: `https://github.com/richardcmg7/demo-build-microservicereto-2.git`
-   - Branch: `*/Jenkins`
+   - Repository URL: `https://github.com/richardcmg7/demo-build-microservice.git`
+   - Branch: `*/reto-2/Jenkins`
    - Script Path: `Jenkinsfile`
 3. Configurar credenciales Docker Hub con ID: `dockerhub-creds`
 

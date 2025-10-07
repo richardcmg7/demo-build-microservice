@@ -2,8 +2,8 @@ pipeline {
     agent { node 'jenkins-slave' }
     
     environment {
-        IMAGE_NAME = "demo-micro"
-        DOCKERHUB_NAMESPACE = "tu-usuario"  // Cambiar por tu usuario de Docker Hub
+        IMAGE_NAME = "demo-micro"  // Tu repositorio de docker hub
+        DOCKERHUB_NAMESPACE = "richardc7"  // tu usuario de Docker Hub
         REGISTRY = "docker.io"
     }
     
@@ -36,8 +36,10 @@ pipeline {
                 script {
                     def tag = env.BUILD_NUMBER
                     def image = docker.build("${DOCKERHUB_NAMESPACE}/${IMAGE_NAME}:${tag}")
-                    docker.withRegistry("https://${REGISTRY}", 'dockerhub-creds') {
-                        image.push()
+                    
+                    // Use Docker Hub registry with proper credentials
+                    docker.withRegistry("https://index.docker.io/v1/", 'dockerhub-creds') {
+                        image.push(tag)
                         image.push('latest')
                     }
                 }
